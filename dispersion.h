@@ -24,7 +24,7 @@
 
 
 /**
- * @brief Abstract class that represents the dispersion fucntions we'll use for the hash table.
+ * @brief Abstract class that represents the dispersion functions we'll use for the hash table.
  *        It has a virtual operator that will be the specialized functions in each sub-class 
  * @param Key class to be interpreted as a Key for the hashes
  */
