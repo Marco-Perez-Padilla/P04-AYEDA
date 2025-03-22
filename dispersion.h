@@ -23,6 +23,9 @@
 #define DISPERSION_H
 
 
+#include <cstdlib> //rand(), srand()
+
+
 /**
  * @brief Abstract class that represents the dispersion functions we'll use for the hash table.
  *        It has a virtual operator that will be the specialized functions in each sub-class 
@@ -42,7 +45,7 @@ template <class Key> class ModuleDispersion : public DispersionFunction<Key> {
  private:
   unsigned table_size_;
  public:
-  ModuleDispersion(unsigned table_size) : table_size_(table_size) {}
+  explicit ModuleDispersion(unsigned table_size) : table_size_(table_size) {}
   unsigned operator()(const Key& key) const override {
     return key % table_size_;
   }
@@ -57,7 +60,7 @@ template <class Key> class SumDispersion : public DispersionFunction<Key> {
  private:
   unsigned table_size_;
  public:
-  SumDispersion(unsigned table_size) : table_size_(table_size) {}
+  explicit SumDispersion(unsigned table_size) : table_size_(table_size) {}
   unsigned operator()(const Key& key) const override {
     // Convert the string to a number
     long key_number = static_cast<long>(key);
@@ -80,7 +83,7 @@ template <class Key> class PseudoRandomDispersion : public DispersionFunction<Ke
  private:
   unsigned table_size_;
  public:
-  PseudoRandomDispersion (unsigned table_size) : table_size_(table_size) {}
+  explicit PseudoRandomDispersion (unsigned table_size) : table_size_(table_size) {}
   unsigned operator()(const Key& key) const override {
     // Generate the seed
     srand(static_cast<long>(key));  

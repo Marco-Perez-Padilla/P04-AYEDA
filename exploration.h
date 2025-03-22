@@ -22,6 +22,8 @@
 #define EXPLORATION_H
 
 #include <cmath> // abs
+#include <cstdlib> //rand(), srand()
+
 #include "dispersion.h"
 
 /**
@@ -67,7 +69,7 @@ template <class Key> class DoubleDispersionExploration : public ExplorationFunct
  private:
   DispersionFunction<Key>& function_;
  public:
-  DoubleDispersion(DispersionFunction<Key>& function) : function_(function) {}
+  explicit DoubleDispersion(DispersionFunction<Key>& function) : function_(function) {}
   unsigned operator()(const Key& key, unsigned i) const override {
     return function_(key) * i;
   }
@@ -76,13 +78,23 @@ template <class Key> class DoubleDispersionExploration : public ExplorationFunct
 
 
 /**
- * @brief Sub-class that specializes the linear exploration function
+ * @brief Sub-class that specializes the redispersion exploration function
  * @param Key class to be interpreted as a Key for the hashes
  */
-template <class Key> class LinearExploration : public ExplorationFunction<Key> {
+template <class Key> class RedispersionExploration : public ExplorationFunction<Key> {
+ private:
+  unsigned table_size_;
  public:
+  RedispersionExploration(unsigned table_size) : table_size_(table_size) {}
   unsigned operator()(const Key& key, unsigned i) const override {
-    return i;
+    srand(static_cast<long>(key));
+
+    unsigned despl {0};
+    for (unsigned j {0}; j <= i; ++j) {
+      despl = (rand() % (table_size_ - 1)) + 1;
+    }
+
+    return despl;
   }
 };
 
