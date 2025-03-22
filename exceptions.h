@@ -18,15 +18,15 @@
 **      22/03/2025 - Creacion (primera version) del codigo
 **/
 
-#ifndef BIG_NUMBER_EXCEPTION_H
-#define BIG_NUMBER_EXCEPTION_H
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
 
 #include <exception>
 #include <string>
 
 
 /**
- * @brief Class BigNumberException that heritages from std:exception, it has a protected member which is the message to be thrown if an error occurs
+ * @brief Class Exceptions that inheritages from std:exception, it has a protected member which is the message to be thrown if an error occurs
  */
 class Exceptions : public std::exception {
  protected:
@@ -38,7 +38,7 @@ class Exceptions : public std::exception {
 
 
 /**
- * @brief Class NifStringException. Throws an exception if there is an invalid digit
+ * @brief Class NifStringException. Throws an exception if size is not 8
  */
 class NifStringException : public Exceptions {
  public:
@@ -47,7 +47,7 @@ class NifStringException : public Exceptions {
 
 
 /**
- * @brief Class NifLongException. Throws an exception if there is an invalid digit
+ * @brief Class NifLongException. Throws an exception if size is greater than 8, or negative number
  */
 class NifLongException : public Exceptions {
  public:
