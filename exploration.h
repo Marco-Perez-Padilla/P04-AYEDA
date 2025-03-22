@@ -21,7 +21,7 @@
 #ifndef EXPLORATION_H
 #define EXPLORATION_H
 
-
+#include <cmath> // abs
 #include "dispersion.h"
 
 /**
@@ -54,7 +54,7 @@ template <class Key> class LinearExploration : public ExplorationFunction<Key> {
 template <class Key> class QuadraticExploration : public ExplorationFunction<Key> {
  public:
   unsigned operator()(const Key& key, unsigned i) const override {
-    return i * i;
+    return std::abs(i * i);
   }
 };
 
