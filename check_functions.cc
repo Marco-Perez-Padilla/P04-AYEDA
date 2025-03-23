@@ -25,6 +25,7 @@
 #include <expected>
 #include <string_view>
 #include <vector>
+#include <limits>
 
 #include "check_functions.h"
 
@@ -164,3 +165,35 @@ std::expected<program_options, parse_args_errors> parse_args(int argc, char* arg
 
   return options; 
 }
+
+
+/**
+ * @brief function that waits for the user to press any key
+ */
+void pressanykey() {
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+  std::cin.get(); 
+}
+
+
+/**
+ * @brief function to clear the standard ouput
+ */
+void clrscr() {
+  system("clear");
+}
+
+
+/**
+* @brief Start menu to choose an option of the following
+* @param char option to be used
+*/
+void menu (char &opcion) {
+ std::cout << "c. [c]argar grafo desde fichero" << std::endl;     
+ std::cout << "a. Mostrar la lista de [a]dyacencia del grafo" << std::endl;
+ std::cout << "m. Realizar un recorrido de a[m]plitud del grafo desde un nodo por sucesores" << std::endl;
+ std::cout << "r. Realizar un [r]ecorrido de profundidad del grafo desde un nodo por sucesores" << std::endl;          
+ std::cout << "q. Finalizar el programa" << std::endl;
+ std::cout << "Introduce la letra de la accion a ejecutar  > ";
+ std::cin >> opcion;
+};

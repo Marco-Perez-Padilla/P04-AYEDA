@@ -76,26 +76,90 @@ int main(int argc, char* argv[]) {
     }
     HashTable<NIF, StaticSequence<NIF>> closed_table(table_size, *fd, *fe, block_size);
 
-    closed_table.insert(NIF(12345678)); // Hash: 12345678 % 10 = 8
-    closed_table.insert(NIF(87654321)); // Hash: 87654321 % 10 = 1
-    closed_table.insert(NIF(13579246)); // Hash: 13579246 % 10 = 6
-    
+    char option;
+    std::cout << "Welcome to the menu. Here you can insert or search a NIF in the specified hash table" << std::endl;
+    std::cout << "Press any key to continue..." << std::endl;
+    pressanykey();
 
-    // Buscar elementos
-    std::cout << "Buscar 12345678: " << closed_table.search(NIF(12345678)) << "\n"; // true
-    std::cout << "Buscar 11111111: " << closed_table.search(NIF(11111111)) << "\n"; // false
+    
+    long inserted_nif;
+
+    do {
+      clrscr();
+      NIF random_nif;
+      menu(option);
+      switch (option) {
+        case 'i':
+          std::cin >> inserted_nif;
+          if (inserted_nif < 0) {
+            closed_table.insert(random_nif);
+            //
+          } else {
+            closed_table.insert(NIF(inserted_nif));
+          }
+          pressanykey();
+        break;
+        
+        case 's':
+          std::cin >> inserted_nif;
+          if (inserted_nif < 0) {
+            //
+          } else {
+            if(closed_table.search(NIF(inserted_nif))) {
+              std::cout << "found" << std::endl; 
+            } else {
+              std::cout << "not found" << std::endl;
+            }
+          }
+          pressanykey();
+        break;
+      }
+    } while (option != 'q');
+
 
   } else { // If opened
     HashTable<NIF, DynamicSequence<NIF>> open_table(table_size, *fd);
 
-    // Insertar elementos (colisiones en misma posición)
-    open_table.insert(NIF(12345678)); // Hash: 8
-    open_table.insert(NIF(12345688)); // Hash: 8 (colisión)
-    open_table.insert(NIF(12345698)); // Hash: 8 (colisión)
+    char option;
+    std::cout << "Welcome to the menu. Here you can insert or search a NIF in the specified hash table" << std::endl;
+    std::cout << "Press any key to continue..." << std::endl;
+    pressanykey();
+    clrscr();
 
-    // Buscar elementos
-    std::cout << "Buscar 12345688: " << open_table.search(NIF(12345688)) << "\n"; // true
-    std::cout << "Buscar 99999999: " << open_table.search(NIF(99999999)) << "\n"; // false
+    
+    long inserted_nif;
+
+    do {
+      clrscr();
+      NIF random_nif;
+      menu(option);
+      switch (option) {
+        case 'i':
+          std::cin >> inserted_nif;
+          if (inserted_nif < 0) {
+            open_table.insert(random_nif);
+            //
+          } else {
+            open_table.insert(NIF(inserted_nif));
+          }
+          pressanykey();
+        break;
+        
+        case 's':
+          std::cin >> inserted_nif;
+          if (inserted_nif < 0) {
+            //
+          } else {
+            if(open_table.search(NIF(inserted_nif))) {
+              std::cout << "found" << std::endl; 
+            } else {
+              std::cout << "not found" << std::endl;
+            }
+          }
+          pressanykey();
+        break;
+      }
+    } while (option != 'q');
   }
 
   return 0;

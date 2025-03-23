@@ -23,8 +23,6 @@
 #include <expected>
 
 
-constexpr std::size_t max_path_size = 4096;
-
 enum class parse_args_errors {
  table_size_error,
  dispersion_function_error,
@@ -50,3 +48,6 @@ bool ValidateNumber (const std::string& line);
 void Help ();
 void Usage();
 std::expected<program_options, parse_args_errors> parse_args(int argc, char* argv[]);
+void pressanykey();
+void clrscr();
+void menu(char &option);
