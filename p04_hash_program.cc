@@ -7,7 +7,7 @@
 ** Practica 4: Búsqueda por dispersión
 ** Autor: Marco Pérez Padilla
 ** Correo: alu0101469348@ull.edu.es
-** Fecha: 05/02/2025
+** Fecha: 22/03/2025
 
 ** Archivo p04_hash_program.cc: programa cliente.
 **      Contiene la funcion main del proyecto que usa las templates para 
@@ -19,63 +19,84 @@
 **      22/03/2025 - Creacion (primera version) del codigo
 **/
 
-
 #include <iostream>
-#include <fstream>
-
-// #include "big_unsigned.h"
-// #include "big_integer.h"
-// #include "big_rational.h"
-// #include "big_number.h"
-// #include "calculator.h"
 
 #include "check_functions.h"
+#include "nif.h"
+#include "hash.h"
+#include "dispersion.h"
+#include "exploration.h"
 
 
-/**
- * @brief main function, invokes the needed function to work as a client function, managing minor errors
- */
-int main (int argc, char* argv[]) {  
-  ValidateCommand(argc, argv);
+int main(int argc, char* argv[]) {
 
-  std::string input = std::string(argv[1]);
-  std::string output = std::string(argv[2]);
+  auto options = parse_args(argc,argv);
 
-  std::ifstream in_file(input);
-  std::ofstream out_file(output);
-
-  if (!in_file) {
-    std::cerr << "Error: File " << input << " couldn't be opened" << std::endl;
+  if (!options.has_value()) {
+    if (options.error() == parse_args_errors::unknown_option) {
+      std::cerr << "fatal error: Unknown option" << std::endl;;
+    }
+    Usage();
     return EXIT_FAILURE;
   }
+
+  if (options.value().show_help) {
+    Help(); 
+    return EXIT_SUCCESS;
+  }
+
+  const unsigned table_size = options.value().table_size;
+  const unsigned block_size = options.value().block_size;
+  const unsigned fd_option = options.value().dispersion_function;
+  const unsigned fe_option = options.value().exploration_function;
+  const unsigned close_option = options.value().open_close_hash;
   
-  if (!out_file) {
-    std::cerr << "Error: File " << output << " couldn't be opened" << std::endl;
-    return EXIT_FAILURE;
+  // Process Dispersion Function
+  DispersionFunction<NIF>* fd = nullptr;
+  if (fd_option == 0) {
+    fd = new ModuleDispersion<NIF>(table_size);
+  } else if (fd_option == 1) {
+    fd = new SumDispersion<NIF>(table_size);
+  } else if (fd_option == 2) {
+    fd = new PseudoRandomDispersion<NIF>(table_size);
   }
 
-  // Read the base, with default base = 10
-  std::string line;
-  unsigned char base = 10; 
-  // try {
-  //   if (getline(in_file, line)) {
-  //     if (line.substr(0, 5) == "Base ") {
-  //       base = static_cast<unsigned char>(std::stoi(line.substr(6)));
-  //       if (base != 2 && base != 8 && base != 10 && base != 16) {
-  //         throw BigNumberNotSupportedBase();
-  //       }
-  //     }
-  //   }
-  // } catch (const BigNumberNotSupportedBase& error) {
-  //   std::cerr << error.what() << std::endl;
-  //   return 1;
-  // }
+  // If closed
+  if (close_option == 0) {
+    // Process Exploration Function
+    ExplorationFunction<NIF>* fe = nullptr;
+    if (fe_option == 0) {
+      fe = new LinearExploration<NIF>();
+    } else if (fe_option == 1) {
+      fe = new QuadraticExploration<NIF>();
+    } else if (fe_option == 2) {
+      fe = new DoubleDispersionExploration<NIF>(*fd);
+    } else if (fe_option == 3) {
+      fe = new RedispersionExploration<NIF>(table_size);
+    }
+    HashTable<NIF, StaticSequence<NIF>> closed_table(table_size, *fd, *fe, block_size);
 
-  in_file.close(); 
+    closed_table.insert(NIF(12345678)); // Hash: 12345678 % 10 = 8
+    closed_table.insert(NIF(87654321)); // Hash: 87654321 % 10 = 1
+    closed_table.insert(NIF(13579246)); // Hash: 13579246 % 10 = 6
+    
 
-  // ProcessFile(base, input, output);
+    // Buscar elementos
+    std::cout << "Buscar 12345678: " << closed_table.search(NIF(12345678)) << "\n"; // true
+    std::cout << "Buscar 11111111: " << closed_table.search(NIF(11111111)) << "\n"; // false
 
-  out_file.close();
+  } else { // If opened
+    HashTable<NIF, DynamicSequence<NIF>> open_table(table_size, *fd);
+
+    // Insertar elementos (colisiones en misma posición)
+    open_table.insert(NIF(12345678)); // Hash: 8
+    open_table.insert(NIF(12345688)); // Hash: 8 (colisión)
+    open_table.insert(NIF(12345698)); // Hash: 8 (colisión)
+
+    // Buscar elementos
+    std::cout << "Buscar 12345688: " << open_table.search(NIF(12345688)) << "\n"; // true
+    std::cout << "Buscar 99999999: " << open_table.search(NIF(99999999)) << "\n"; // false
+  }
 
   return 0;
 }

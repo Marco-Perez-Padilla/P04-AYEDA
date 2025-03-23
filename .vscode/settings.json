@@ -108,6 +108,12 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "typeinfo": "cpp",
-    "list": "cpp"
+    "list": "cpp",
+    "expected": "cpp",
+    "charconv": "cpp",
+    "cstring": "cpp",
+    "format": "cpp",
+    "span": "cpp",
+    "variant": "cpp"
   }
 }

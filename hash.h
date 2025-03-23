@@ -63,7 +63,7 @@ template<class Key, class Container> HashTable<Key, Container>::HashTable(unsign
   table_ = new Container*[table_size_];
   // Create a container for each position
   for (unsigned i {0}; i < table_size_; ++i) {
-    table_[i] = new Container<Key>(block_size_);
+    table_[i] = new Container(block_size_);
   }
 }
 
@@ -131,7 +131,7 @@ template <class Key> class HashTable<Key, DynamicSequence<Key>> {
  private:
   unsigned table_size_;
   DynamicSequence<Key>* table_;
-  DispersionFunction& fd_;
+  DispersionFunction<Key>& fd_;
  public:
   // Constructor
   HashTable(unsigned, DispersionFunction<Key>&);

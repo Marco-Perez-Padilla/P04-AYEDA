@@ -46,7 +46,7 @@ NIF::NIF() {
 /**
  * @brief NIF constructor given a string
  */
-explicit NIF::NIF (const std::string& nif) {
+NIF::NIF (const std::string& nif) {
   if (nif == "-1") {
     nif_ = nif;
     return;
@@ -62,7 +62,7 @@ explicit NIF::NIF (const std::string& nif) {
 /**
  * @brief NIF constuctor fiven a long number. It checks if the number is valid
  */
-explicit NIF::NIF (long nif_number) {
+NIF::NIF (long nif_number) {
   if (nif_number == -1) {
     nif_ = std::to_string(nif_number);
     return;
@@ -159,4 +159,5 @@ bool NIF::isEmpty() const {return (nif_ == "-1");}
  */
 std::ostream& operator<< (std::ostream& os, const NIF& nif) {
   os << nif.getNif();
+  return os;
 }

@@ -56,7 +56,7 @@ template <class Key> class LinearExploration : public ExplorationFunction<Key> {
 template <class Key> class QuadraticExploration : public ExplorationFunction<Key> {
  public:
   unsigned operator()(const Key& key, unsigned i) const override {
-    return std::abs(i * i);
+    return i * i;
   }
 };
 
@@ -69,7 +69,7 @@ template <class Key> class DoubleDispersionExploration : public ExplorationFunct
  private:
   DispersionFunction<Key>& function_;
  public:
-  explicit DoubleDispersion(DispersionFunction<Key>& function) : function_(function) {}
+  explicit DoubleDispersionExploration(DispersionFunction<Key>& function) : function_(function) {}
   unsigned operator()(const Key& key, unsigned i) const override {
     return function_(key) * i;
   }

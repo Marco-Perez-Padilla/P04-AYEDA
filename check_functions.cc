@@ -22,53 +22,11 @@
 #include <fstream>
 #include <regex>
 #include <string>
+#include <expected>
+#include <string_view>
+#include <vector>
 
 #include "check_functions.h"
-
-
-/**
- * @brief Validates the extension of the input file
- * @param string  
- * @return bool-type. True if the file is accepted. False otherwise
- */
-bool ValidateFile (const std::string& name) {
-  if (name.find('.') == std::string::npos) {
-    return false;  
-  }
-  std::regex pattern (R"((.*)\.(txt)$)");
-  return std::regex_match(name, pattern);
-}
-
-/**
- * @brief Uses ValidateFile function. Acts in consequence of the returned type
- * @param string  
- */
-void CheckFileError (const std::string& name) {
-  if (ValidateFile(name)) return;
-  std::cerr << "Error in input file: Wrong extension. Please, try \"./p03_big_calculator --help\" for further information" << std::endl;
-  exit(EXIT_FAILURE);
-}
-
-
-
-/**
- * @brief Validates the line of commands and uses Help, Usage and CheckFileError functions
- * @param int argc  
- * @param char* argv[]
- */
-void ValidateCommand(int argc, char* argv[]) {
-  if (argc == 2 && std::string(argv[1]) == "--help") {
-    Help();
-    exit(EXIT_SUCCESS);
-  } else if (argc != 3) {
-    Usage();
-    exit(EXIT_FAILURE);
-  } else {
-    CheckFileError(std::string(argv[1]));
-    CheckFileError(std::string(argv[2]));
-  }
-  
-}
 
 
 /**
@@ -116,4 +74,93 @@ void Help () {
 void Usage() {
   std::cout << "How to use: ./p03_big_calculator\n"
             << "Try './p03_big_calculator --help' for further information\n";
+}
+
+
+/**
+ * @brief Function that processes the arguments given through command line
+ * @param argc
+ * @param argv
+ * @return Program options struct with all the options if no error has occured. Enum parse args error otherwise with the specified error
+ */
+std::expected<program_options, parse_args_errors> parse_args(int argc, char* argv[]) {
+  bool table_size = false;
+  bool dispersion_function = false;
+  bool open_hash = false;
+  bool block_size = false;
+  bool exploration_function = false;
+
+  std::vector<std::string_view> args(argv + 1, argv + argc);
+  program_options options;
+
+  for (auto it = args.begin(), end = args.end(); it != end; ++it) {
+    if (*it == "-h" || *it == "--help") {
+      options.show_help = true;
+    } else if (*it == "-ts") {
+      table_size = true;
+      continue;
+    } else if (*it == "-fd") {
+      dispersion_function = true;
+      continue;
+    } else if (*it == "-hash") {
+      open_hash = true;
+      continue;
+    } else if (*it == "-bs") {
+      block_size = true;
+      continue;
+    } else if (*it == "-fe") {
+      exploration_function = true;
+      continue;
+    } else if (table_size == true) {
+      table_size = false;
+      if (ValidateNumber(std::string(*it))) {
+        options.table_size = std::stoi(std::string(*it));
+      } else {
+        return std::unexpected(parse_args_errors::table_size_error);
+      }
+    } else if (dispersion_function == true) {
+      dispersion_function = false;
+      if (ValidateNumber(std::string(*it))) {
+        int disp_func = std::stoi(std::string(*it));
+        if (disp_func < 0 || disp_func > 2) {
+          return std::unexpected(parse_args_errors::dispersion_function_error);
+        } else {
+          options.dispersion_function = disp_func;
+        }
+      } else {
+        return std::unexpected(parse_args_errors::dispersion_function_error);
+      }
+    } else if (exploration_function == true) {
+      exploration_function = false;
+      if (ValidateNumber(std::string(*it))) {
+        int expl_func = std::stoi(std::string(*it));
+        if (expl_func < 0 || expl_func > 3) {
+          return std::unexpected(parse_args_errors::exploration_function_error);
+        } else {
+          options.exploration_function = expl_func;
+        }
+      } else {
+        return std::unexpected(parse_args_errors::exploration_function_error);
+      }
+    } else if (open_hash == true) {
+      open_hash = false;
+      if (std::string(*it) == "open") {
+        options.open_close_hash = 1;
+      } else if (std::string(*it) == "close"){
+        options.open_close_hash = 0;
+      } else {
+        return std::unexpected(parse_args_errors::hash_error);
+      }
+    } else if (block_size == true) {
+      if (ValidateNumber(std::string(*it))) {
+        options.block_size = std::stoi(std::string(*it));
+      } else {
+        return std::unexpected(parse_args_errors::block_size_error);
+      }
+    } else {
+      return std::unexpected(parse_args_errors::unknown_option); 
+    }
+  }
+
+  return options; 
 }

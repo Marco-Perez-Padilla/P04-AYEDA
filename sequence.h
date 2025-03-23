@@ -36,6 +36,7 @@
  */
 template <class Key> class Sequence {
  public:
+  virtual ~Sequence() {}
   virtual bool search(const Key&) const = 0;
   virtual bool insert(const Key&) = 0;
 };
