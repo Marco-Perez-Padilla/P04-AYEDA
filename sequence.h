@@ -9,7 +9,7 @@
 ** Correo: alu0101469348@ull.edu.es
 ** Fecha: 22/03/2025
 
-** Archivo sequence.h: Declaracion e implementacion de la plantilla para 
+** Archivo sequence.h: Declaracion e implementacion de la plantilla para las secuencias estáticas y dinámicas
 **
 ** Referencias:
 **      Enlaces de interes
