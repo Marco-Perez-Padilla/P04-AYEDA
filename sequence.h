@@ -61,6 +61,9 @@ template<class Key> class DynamicSequence : public Sequence<Key> {
  * @return true if the element has been found, false otherwise
  */
 template<class Key> bool DynamicSequence<Key>::search(const Key& key) const {
+  if (key.isEmpty()) {
+    return false;
+  }
   return std::find(values_.begin(), values_.end(), key) != values_.end();
 }
 
@@ -71,6 +74,9 @@ template<class Key> bool DynamicSequence<Key>::search(const Key& key) const {
  * @return true if the element can be inserted (if it wasn't previously on the sequence), false otherwise
  */
 template<class Key> bool DynamicSequence<Key>::insert(const Key& key) {
+  if (key.isEmpty()) {
+    return false;
+  }
   if (!search(key)) {
     values_.push_back(key);
     return true;
@@ -110,6 +116,9 @@ template<class Key> StaticSequence<Key>::StaticSequence(unsigned block_size) : b
     throw BlockSizeZeroException();
   }
   values_ = new Key[block_size_];
+  for (unsigned i {0}; i < block_size_; ++i) {
+    values_[i] = Key(-1);
+  }
 }
 
 
@@ -136,6 +145,9 @@ template<class Key> bool StaticSequence<Key>::isFull() const {
  * @return true if the element has been found, false otherwise
  */
 template<class Key> bool StaticSequence<Key>::search(const Key& key) const {
+  if (key.isEmpty()) {
+    return false;
+  }
   return std::find(values_, values_ + size_, key) != values_ + size_;
 }
 
@@ -146,6 +158,9 @@ template<class Key> bool StaticSequence<Key>::search(const Key& key) const {
  * @return true if the element can be inserted (if it wasn't previously on the sequence nor the table is full), false otherwise
  */
 template <class Key> bool StaticSequence<Key>::insert(const Key& key) {
+  if (key.isEmpty()) {
+    return false;
+  }
   if (isFull() || search(key)) {
     return false;
   } else {

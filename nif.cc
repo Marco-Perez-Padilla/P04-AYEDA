@@ -47,6 +47,10 @@ NIF::NIF() {
  * @brief NIF constructor given a string
  */
 explicit NIF::NIF (const std::string& nif) {
+  if (nif == "-1") {
+    nif_ = nif;
+    return;
+  }
   // If it doesn't have 8 digits or it's not  number, throw an exception
   if (nif.size() != 8 || !ValidateNumber(nif)) {
     throw NifStringException();
@@ -59,6 +63,10 @@ explicit NIF::NIF (const std::string& nif) {
  * @brief NIF constuctor fiven a long number. It checks if the number is valid
  */
 explicit NIF::NIF (long nif_number) {
+  if (nif_number == -1) {
+    nif_ = std::to_string(nif_number);
+    return;
+  }
   // If negative number or more than 8 digits, throw an exception
   if (nif_number < 0 || nif_number > 99999999) {
     throw NifLongException();
@@ -134,6 +142,13 @@ bool NIF::operator>=(const NIF& other_nif) const {
  * @brief operator to change type from NIF to long
  */
 NIF::operator long() const {return std::stol(nif_);}
+
+
+/**
+ * @brief Method that checks if a nif is empty
+ * @return true is nif = -1, false otherwise
+ */
+bool NIF::isEmpty() const {return (nif_ == "-1");}
 
 
 /**

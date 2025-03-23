@@ -48,6 +48,8 @@ class NIF {
   bool operator>=(const NIF&) const;
   // Change type operator
   operator long() const;
+  // Empty method
+  bool isEmpty() const;
 };
 std::ostream& operator<< (std::ostream&, const NIF&);
 

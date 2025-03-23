@@ -65,7 +65,6 @@ template<class Key, class Container> HashTable<Key, Container>::HashTable(unsign
   for (unsigned i {0}; i < table_size_; ++i) {
     table_[i] = new Container<Key>(block_size_);
   }
-  
 }
 
 
