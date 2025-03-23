@@ -32,19 +32,44 @@
  */
 template <class Key, class Container = StaticSequence<Key>> class HashTable {
  private:
-  unsigned table_size_;
-  Container* table_;
-  DispersionFunction<Key>& fd_;
-  ExplorationFunction<Key>& fe_;
-  unsigned block_size_;
+  unsigned table_size_; // Size of the table
+  Container** table_; // Array of arrays (pointer of pointers)
+  DispersionFunction<Key>& fd_; // Dispersion function to be used
+  ExplorationFunction<Key>& fe_; // Exploration function to be used
+  unsigned block_size_; // Size of each block
  public:
   HashTable(unsigned, DispersionFunction<Key>&, ExplorationFunction<Key>&, unsigned);
+  ~HashTable();
 };
 
 
 /**
- * 
+ * @brief Constructor for the HashTable. Creates the table
+ * @param unsigned maximum size of the table
+ * @param DispersionFunction& to be used
+ * @param ExplorationFunction& to be used
+ * @param unsigned maximum size of each container
  */
-template<class Key, class Container> HashTable<Key, Container>::HashTable(unsigned table_size, DispersionFunction<Key>& fd, ExplorationFunction<Key>& fe, unsigned block_size) : 
+template<class Key, class Container> HashTable<Key, Container>::HashTable(unsigned table_size, DispersionFunction<Key>& fd, ExplorationFunction<Key>& fe, unsigned block_size) : table_size_(table_size), fd_(fd), fe_(fe), block_size_(block_size) {
+  // Assign the memory to the table
+  table_ = new Container*[table_size_];
+  // Create a container for each position
+  for (unsigned i {0}; i < table_size_; ++i) {
+    table_[i] = new Container<Key>(block_size_);
+  }
+  
+}
+
+
+/**
+ * @brief Default destructor for HashTable class
+ */
+template<class Key, class Container> HashTable<Key, Container>::~HashTable() {
+  for (unsigned i {0}; i < table_size_; ++i) {
+    delete table_[i];
+  }
+  delete[] table_;
+}
+
 
 #endif
