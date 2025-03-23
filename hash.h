@@ -26,9 +26,9 @@
 #include "sequence.h"
 
 /**
- * @brief
- * @param
- * @param
+ * @brief HashTable class that
+ * @param Key class to be interpreted as a Key for the hash table
+ * @param Container static or dynamic in which the data will be allocated in
  */
 template <class Key, class Container = StaticSequence<Key>> class HashTable {
  private:
@@ -38,6 +38,13 @@ template <class Key, class Container = StaticSequence<Key>> class HashTable {
   ExplorationFunction<Key>& fe_;
   unsigned block_size_;
  public:
+  HashTable(unsigned, DispersionFunction<Key>&, ExplorationFunction<Key>&, unsigned);
 };
+
+
+/**
+ * 
+ */
+template<class Key, class Container> HashTable<Key, Container>::HashTable(unsigned table_size, DispersionFunction<Key>& fd, ExplorationFunction<Key>& fe, unsigned block_size) : 
 
 #endif

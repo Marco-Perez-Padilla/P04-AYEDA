@@ -89,7 +89,7 @@ template <class Key> class StaticSequence : public Sequence<Key> {
   unsigned size_;
  public:
   // Constructor
-  StaticSequence(unsigned);
+  explicit StaticSequence(unsigned);
   // Destructor
   ~StaticSequence();
   // full method
