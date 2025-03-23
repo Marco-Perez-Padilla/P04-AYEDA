@@ -26,6 +26,7 @@
 #include <list>
 #include <algorithm> // find()
 
+#include "exceptions.h"
 
 /**
  * @brief Abstract class that represents the kind of dispersion technics (open or close) we'll use.
@@ -104,6 +105,9 @@ template <class Key> class StaticSequence : public Sequence<Key> {
  * @brief constructor for the static sequence
  */
 template<class Key> StaticSequence<Key>::StaticSequence(unsigned block_size) : block_size_(block_size), size_(0) {
+  if (block_size_ == 0) {
+    throw BlockSizeZeroException();
+  }
   values_ = new Key[block_size_];
 }
 
@@ -141,12 +145,12 @@ template<class Key> bool StaticSequence<Key>::search(const Key& key) const {
  * @return true if the element can be inserted (if it wasn't previously on the sequence nor the table is full), false otherwise
  */
 template <class Key> bool StaticSequence<Key>::insert(const Key& key) {
-  if (!isFull() && !search(key)) {
-    values_[size_] = key;
-    size_ += 1;
-    return true;
-  } else {
+  if (isFull() || search(key)) {
     return false;
+  } else {
+    values_[size_] = key;
+    ++size_;
+    return true;
   }
 }
 

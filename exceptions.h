@@ -55,4 +55,22 @@ class NifLongException : public Exceptions {
 };
 
 
+/**
+ * @brief Class BlockSizeZeroException. Throws an exception if the given block size is 0
+ */
+class BlockSizeZeroException : public Exceptions {
+ public:
+  BlockSizeZeroException() : Exceptions("Error: Block size can't be 0") {}
+};
+
+
+/**
+ * @brief Class ClosedInsertException. Throws an exception if a key couldn't be inserted on a hash table
+ */
+class ClosedInsertException : public Exceptions {
+ public:
+  ClosedInsertException() : Exceptions("Error: Key couldn't be inserted") {}
+};
+
+
 #endif
