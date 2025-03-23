@@ -4,7 +4,8 @@ CXXFLAGS = -std=c++23 -Wall -g
 SOURCES = $(wildcard *.cc)
 OBJ = $(SOURCES:.cc=.o)
 
-EXECUTABLE = p04_hash_program
+MAIN_FILE = $(shell grep -l "int main" *.cc)
+EXECUTABLE = $(basename $(MAIN_FILE))
 
 all: $(EXECUTABLE)
 
