@@ -89,21 +89,40 @@ template <class Key> class StaticSequence : public Sequence<Key> {
   unsigned size_;
  public:
   // Constructor
-  StaticSequence(unsigned block_size) : block_size_(block_size), size_(0) {
-    values_ = new Key[block_size_];
-  }
+  StaticSequence(unsigned);
   // Destructor
-  ~StaticSequence() {
-    delete[] values_;
-  }
-  // Check full method
-  virtual bool isFull() const {
-    return size_ >= block_size_;
-  }
+  ~StaticSequence();
+  // full method
+  virtual bool isFull() const;
   // Search and insert methods
   bool search(const Key&) const override;
   bool insert(const Key&) override;
 };
+
+
+/**
+ * @brief constructor for the static sequence
+ */
+template<class Key> StaticSequence<Key>::StaticSequence(unsigned block_size) : block_size_(block_size), size_(0) {
+  values_ = new Key[block_size_];
+}
+
+
+/**
+ * @brief Default destructor for the static sequence
+ */
+template<class Key> StaticSequence<Key>::~StaticSequence() {
+  delete[] values_;
+}
+
+
+/**
+ * @brief Method that checks id a sequence is full or not
+ * @return true if it's full. False otherwise
+ */
+template<class Key> bool StaticSequence<Key>::isFull() const {
+  return size_ >= block_size_;
+}
 
 
 /**

@@ -21,7 +21,23 @@
 #ifndef HASH_H
 #define HASH_H
 
+#include "dispersion.h"
+#include "exploration.h"
+#include "sequence.h"
 
-
+/**
+ * @brief
+ * @param
+ * @param
+ */
+template <class Key, class Container = StaticSequence<Key>> class HashTable {
+ private:
+  unsigned table_size_;
+  Container* table_;
+  DispersionFunction<Key>& fd_;
+  ExplorationFunction<Key>& fe_;
+  unsigned block_size_;
+ public:
+};
 
 #endif
