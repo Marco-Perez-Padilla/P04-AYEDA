@@ -17,6 +17,7 @@
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
 **      23/03/2025 - Creación de sub-clases dinamica y estatica
+**      23/03/2025 - Adicion comprobacion block size no 0
 **/
 
 #ifndef SEQUENCE_H

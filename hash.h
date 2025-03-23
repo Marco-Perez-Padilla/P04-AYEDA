@@ -9,13 +9,15 @@
 ** Correo: alu0101469348@ull.edu.es
 ** Fecha: 22/03/2025
 
-** Archivo hashf.h: Declaracion e implementacion de la plantilla para
+** Archivo hash.h: Declaracion e implementacion de la Hash Table mediante el uso de funciones de
+**                 exploracion, secuencias y dispersion. Manejo de colisiones
 **
 ** Referencias:
 **      Enlaces de interes
 
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
+**      23/03/2025 - Adicion de DynamicSequence specialization
 **/
 
 #ifndef HASH_H
