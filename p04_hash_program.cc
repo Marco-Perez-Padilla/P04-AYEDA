@@ -18,7 +18,7 @@
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
 **      23/03/2025 - Primera version funcional. Instanciacion de las plantillas
-**      23/03/2025 - Creaciond el menu
+**      23/03/2025 - Creacion del menu
 **      24/03/2025 - Adicion manejo de errores
 **/
 
