@@ -123,7 +123,7 @@ std::expected<program_options, parse_args_errors> parse_args(int argc, char* arg
       continue;
     } else if (table_size == true) {
       table_size = false;
-      if (ValidateNumber(std::string(*it))) {
+      if (ValidateNumber(std::string(*it)) && std::stoi(std::string(*it)) > 0) {
         options.table_size = std::stoi(std::string(*it));
       } else {
         return std::unexpected(parse_args_errors::table_size_error);
@@ -162,7 +162,7 @@ std::expected<program_options, parse_args_errors> parse_args(int argc, char* arg
         return std::unexpected(parse_args_errors::hash_error);
       }
     } else if (block_size == true) {
-      if (ValidateNumber(std::string(*it))) {
+      if (ValidateNumber(std::string(*it)) && std::stoi(std::string(*it)) > 0) {
         options.block_size = std::stoi(std::string(*it));
       } else {
         return std::unexpected(parse_args_errors::block_size_error);
@@ -202,11 +202,36 @@ void clrscr() {
 * @param char option to be used
 */
 void menu (char &opcion) {
- std::cout << "c. [c]argar grafo desde fichero" << std::endl;     
- std::cout << "a. Mostrar la lista de [a]dyacencia del grafo" << std::endl;
- std::cout << "m. Realizar un recorrido de a[m]plitud del grafo desde un nodo por sucesores" << std::endl;
- std::cout << "r. Realizar un [r]ecorrido de profundidad del grafo desde un nodo por sucesores" << std::endl;          
- std::cout << "q. Finalizar el programa" << std::endl;
- std::cout << "Introduce la letra de la accion a ejecutar  > ";
+ std::cout << "i. [i]nsert new NIF, number with 8 digits" << std::endl;     
+ std::cout << "s. [s]earch a specified NIF in the table hash" << std::endl;         
+ std::cout << "q. [q]uit program" << std::endl;
+ std::cout << "Introduce the action to execute  > ";
  std::cin >> opcion;
 };
+
+
+/**
+ * @brief Function that processes error messages from std::unexpected
+ * @param expected options after command line
+ * @return 0 if 
+ */
+bool ProcessArgsErrors(const std::expected<program_options, parse_args_errors>& options) {
+  if (!options.has_value()) {
+    if (options.error() == parse_args_errors::unknown_option) {
+      std::cerr << "fatal error: Unknown option" << std::endl;;
+    } else if (options.error() == parse_args_errors::table_size_error) {
+      std::cerr << "fatal error: Table size, it must be a non negative number superior than 0" << std::endl;
+    } else if (options.error() == parse_args_errors::block_size_error) {
+      std::cerr << "fatal error: Block size, it must be a non negative number superior than 0" << std::endl;
+    } else if (options.error() == parse_args_errors::dispersion_function_error) {
+      std::cerr << "fatal error: Dispersion function code must be 0, 1 or 2" << std::endl;
+    } else if (options.error() == parse_args_errors::exploration_function_error) {
+      std::cerr << "fatal error: Dispersion function code must be 0, 1, 2 or 3" << std::endl;
+    } else if (options.error() == parse_args_errors::hash_error) {
+      std::cerr << "fatal error: Hash code must be 0 or 1" << std::endl;
+    }
+    Usage();
+    return 0;
+  }
+  return 1;
+}

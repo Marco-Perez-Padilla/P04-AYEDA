@@ -70,7 +70,7 @@ class BlockSizeZeroException : public Exceptions {
  */
 class ClosedInsertException : public Exceptions {
  public:
-  ClosedInsertException() : Exceptions("Error: Key couldn't be inserted") {}
+  ClosedInsertException() : Exceptions("Error: Key couldn't be inserted, block full") {}
 };
 
 

@@ -51,3 +51,4 @@ std::expected<program_options, parse_args_errors> parse_args(int argc, char* arg
 void pressanykey();
 void clrscr();
 void menu(char &option);
+bool ProcessArgsErrors(const std::expected<program_options, parse_args_errors>& options);

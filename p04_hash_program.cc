@@ -32,17 +32,14 @@ int main(int argc, char* argv[]) {
 
   auto options = parse_args(argc,argv);
 
-  if (!options.has_value()) {
-    if (options.error() == parse_args_errors::unknown_option) {
-      std::cerr << "fatal error: Unknown option" << std::endl;;
-    }
-    Usage();
-    return EXIT_FAILURE;
+  bool errors = ProcessArgsErrors(options);
+  if (errors == 0) {
+    exit(EXIT_FAILURE);
   }
 
   if (options.value().show_help) {
     Help(); 
-    return EXIT_SUCCESS;
+    return 0;
   }
 
   const unsigned table_size = options.value().table_size;
@@ -75,14 +72,12 @@ int main(int argc, char* argv[]) {
       fe = new RedispersionExploration<NIF>(table_size);
     }
     HashTable<NIF, StaticSequence<NIF>> closed_table(table_size, *fd, *fe, block_size);
-
     char option;
     clrscr();
     std::cout << "Welcome to the menu. Here you can insert or search a NIF in the specified hash table" << std::endl;
     std::cout << "Press any key to continue..." << std::endl;
     pressanykey();
-
-    
+      
     long inserted_nif;
 
     do {
@@ -91,33 +86,42 @@ int main(int argc, char* argv[]) {
       menu(option);
       switch (option) {
         case 'i':
+          std::cout << "Insert NIF: ";
           std::cin >> inserted_nif;
           if (inserted_nif < 0) {
             closed_table.insert(random_nif);
-            //
+            std::cout << "Inserted NIF wasn't valid. Introducing random NIF: " << random_nif << std::endl;
           } else {
-            closed_table.insert(NIF(inserted_nif));
-          }
-          pressanykey();
-        break;
-        
-        case 's':
-          std::cin >> inserted_nif;
-          if (inserted_nif < 0) {
-            //
-          } else {
-            if(closed_table.search(NIF(inserted_nif))) {
-              std::cout << "found" << std::endl; 
-            } else {
-              std::cout << "not found" << std::endl;
+            try {
+              closed_table.insert(NIF(inserted_nif));
+              std::cout << "NIF " << inserted_nif << " succesfully inserted" << std::endl;
+            } catch(const NifLongException& error) {
+              std::cerr << error.what() << std::endl;
+            } catch(const ClosedInsertException& error) {
+              std::cerr << error.what() << std::endl;
             }
           }
+          std::cout << "Press any key to continue..." << std::endl;
+          pressanykey();
+        break;
+          
+        case 's':
+          std::cout << "Search NIF: ";
+          std::cin >> inserted_nif;
+          if (inserted_nif < 0) {
+            std::cout << "NIF " << inserted_nif << " not valid" << std::endl; 
+          } else {
+            if(closed_table.search(NIF(inserted_nif))) {
+              std::cout << "NIF " << inserted_nif << " found" << std::endl; 
+            } else {
+              std::cout << "NIF " << inserted_nif << " not found" << std::endl; 
+            }
+          }
+          std::cout << "Press any key to continue..." << std::endl;
           pressanykey();
         break;
       }
     } while (option != 'q');
-
-
   } else { // If opened
     HashTable<NIF, DynamicSequence<NIF>> open_table(table_size, *fd);
 
@@ -136,27 +140,36 @@ int main(int argc, char* argv[]) {
       menu(option);
       switch (option) {
         case 'i':
+          std::cout << "Insert NIF: ";
           std::cin >> inserted_nif;
           if (inserted_nif < 0) {
-            open_table.insert(random_nif);
-            //
+            try {
+              open_table.insert(random_nif);
+              std::cout << "Inserted NIF wasn't valid. Introducing random NIF: " << random_nif << std::endl;
+            } catch (const NifLongException& error) {
+              std::cerr << error.what() << std::endl;
+            }
           } else {
             open_table.insert(NIF(inserted_nif));
+            std::cout << "NIF " << inserted_nif << " succesfully inserted" << std::endl;
           }
+          std::cout << "Press any key to continue..." << std::endl;
           pressanykey();
         break;
         
         case 's':
+          std::cout << "Search NIF: ";
           std::cin >> inserted_nif;
           if (inserted_nif < 0) {
-            //
+            std::cout << "NIF " << inserted_nif << " not valid" << std::endl; 
           } else {
             if(open_table.search(NIF(inserted_nif))) {
-              std::cout << "found" << std::endl; 
+              std::cout << "NIF " << inserted_nif << " found" << std::endl; 
             } else {
-              std::cout << "not found" << std::endl;
+              std::cout << "NIF " << inserted_nif << " not found" << std::endl; 
             }
           }
+          std::cout << "Press any key to continue..." << std::endl;
           pressanykey();
         break;
       }
