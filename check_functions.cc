@@ -30,6 +30,15 @@
 #include "check_functions.h"
 
 
+// Including libreries for compatibility among operative systems
+#ifdef _WIN32
+  #include <conio.h>  // _getch() for pressanykey
+  #define CLEAR "cls" // Macro for clrscr in Windows
+#else
+  #define CLEAR "clear" // Macro for clrscr in Linux
+#endif
+
+
 /**
  * @brief Checks if a given string is made out of (only) numbers or not
  * @param string
@@ -171,8 +180,12 @@ std::expected<program_options, parse_args_errors> parse_args(int argc, char* arg
  * @brief function that waits for the user to press any key
  */
 void pressanykey() {
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-  std::cin.get(); 
+  #ifdef _WIN32
+    _getch(); // Windows
+  #else
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Linux
+    std::cin.get(); 
+  #endif
 }
 
 
@@ -180,7 +193,7 @@ void pressanykey() {
  * @brief function to clear the standard ouput
  */
 void clrscr() {
-  system("clear");
+  system(CLEAR);
 }
 
 
