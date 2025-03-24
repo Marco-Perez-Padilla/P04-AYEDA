@@ -10,13 +10,16 @@
 ** Fecha: 22/03/2025
 
 ** Archivo p04_hash_program.cc: programa cliente.
-**      Contiene la funcion main del proyecto que usa las templates para 
+**      Contiene la funcion main del proyecto que usa las templates para crear una tabla hash, y hacer busquedas e inserciones en la misma
 **
 ** Referencias:
 **      Enlaces de interes
 
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
+**      23/03/2025 - Primera version funcional. Instanciacion de las plantillas
+**      23/03/2025 - Creaciond el menu
+**      24/03/2025 - Adicion manejo de errores
 **/
 
 #include <iostream>
@@ -42,6 +45,7 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
+  // Getting the values given by the user in command line
   const unsigned table_size = options.value().table_size;
   const unsigned block_size = options.value().block_size;
   const unsigned fd_option = options.value().dispersion_function;
@@ -130,8 +134,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Press any key to continue..." << std::endl;
     pressanykey();
     clrscr();
-
-    
+  
     long inserted_nif;
 
     do {

@@ -16,6 +16,8 @@
 
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
+**      23/03/2025 - Adicion funcion para manejar opciones del comando
+**      24/03/2025 - Adicion funcion para manejar errores del comando
 **/
 
 #include <iostream>
@@ -23,6 +25,7 @@
 #include <expected>
 
 
+// Enum of errors in arguments
 enum class parse_args_errors {
  table_size_error,
  dispersion_function_error,
@@ -32,6 +35,8 @@ enum class parse_args_errors {
  unknown_option,
 };
 
+
+// Struct that storages the values given in command line
 struct program_options {
  bool show_help = false;
  int table_size = 1000; // table size 1000 as default
@@ -47,8 +52,8 @@ void ValidateCommand(int argc, char* argv[]);
 bool ValidateNumber (const std::string& line);
 void Help ();
 void Usage();
-std::expected<program_options, parse_args_errors> parse_args(int argc, char* argv[]);
 void pressanykey();
 void clrscr();
 void menu(char &option);
 bool ProcessArgsErrors(const std::expected<program_options, parse_args_errors>& options);
+std::expected<program_options, parse_args_errors> parse_args(int argc, char* argv[]);

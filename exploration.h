@@ -9,7 +9,8 @@
 ** Correo: alu0101469348@ull.edu.es
 ** Fecha: 22/03/2025
 
-** Archivo exploration.h: Declaracion e implementacion de la plantilla para 
+** Archivo exploration.h: Declaracion e implementacion de la clase abstracta para trabajar con funciones
+**                        de exploracion, así como las sub-clases que representan e implementan dichas funciones.
 **
 ** Referencias:
 **      Enlaces de interes
@@ -21,7 +22,6 @@
 #ifndef EXPLORATION_H
 #define EXPLORATION_H
 
-#include <cmath> // abs
 #include <cstdlib> //rand(), srand()
 
 #include "dispersion.h"

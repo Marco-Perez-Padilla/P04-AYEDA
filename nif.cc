@@ -9,13 +9,14 @@
 ** Correo: alu0101469348@ull.edu.es
 ** Fecha: 22/03/2025
 
-** Archivo nif.h: Implementación de la clase NIF 
+** Archivo nif.cc: Implementación de la clase NIF 
 **
 ** Referencias:
 **      Enlaces de interes
 
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
+**      23/03/2025 - Modificacion constructores para aceptar -1
 **/
 
 

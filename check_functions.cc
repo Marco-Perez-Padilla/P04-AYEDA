@@ -16,6 +16,8 @@
 
 ** Historial de revisiones:
 **      22/03/2025 - Creacion (primera version) del codigo
+**      23/03/2025 - Adicion funcion para manejar opciones del comando
+**      24/03/2025 - Adicion funcion para manejar errores del comando
 **/
 
 #include <iostream>
@@ -63,17 +65,21 @@ bool ValidateNumber (const std::string& line) {
  */
 void Help () {
     std::cout << "./p03_big_calculator -- Calculator that works in bases 2, 8, 10 and 16 with unsigned, integers and rationals\n"
-              << "Usage:                ./p03_big_calculator filein.txt fileout.txt\n"
+              << "Usage:                ./p04_hash_program [--help | -h] [-ts <s>] [-fd <f>] [-hash <open|close>] [-bs <s] [-fe <f>]\n"
               << "\n"
-              << "filein.txt:      Input file, with extension .txt and format:\n"
-              << "                       First line specifying the base, such as: 'Base = X' in where X is the wanted base (2, 8, 10 or 16)\n"
-              << "                       For each of the following lines, They must start with a label, followed by '=' OR '?':\n"
-              << "                            - ?: Indicates that the following will be an expression to be evaluated\n"
-              << "                            - =: Indicates that the following is the value of an operand. There are three posibilities for such:\n"
-              << "                                - Unsigned: Unsigned number, according to the specified base. After the number, it must end with 'u'. Example: 10u\n"
-              << "                                - Integer: Integer number, according to the specified base. After the number, it must end with 'u'. Example: -10i\n"
-              << "                                - Rational: Rational number, according to the specified base. Format 'numerator/denominator'. After the number, it must end with 'r'. Ex: 10/-3r\n"
-              << "fileout.txt:     Output file with the results of the analysis\n"
+              << "    [--help | -h]:       Optional argument. Prints this help\n"
+              << "    [-ts <s>]:           Optional argument. Initializes a hash table with the size specified by <s>, positive number greater than 0. Default table size is 1000\n"
+              << "    [-fd <f>]:           Optional argument: Specifies with <f> the distribution function to be used in the hash table (module function as default). Its codes are as follows:\n"
+              << "                              - 0: Module function\n"
+              << "                              - 1: Sum function\n"
+              << "                              - 2: Pseudo-random function\n"
+              << "    [-hash <open|close>] Optional argument: If used with <open>, hash table with use dynamic sequence. If <close> specified, static sequence (hash table will use static sequence by default as well) \n"
+              << "    [-bs <s>]:           Optional argument. Initializes the blocks of the hash table with the size specified by <s>, positive number greater than 0. Default block size is 1\n"
+              << "    [-fe <f>]:           Optional argument: Specifies with <f> the exploration function to be used in the hash table (linear exploration as default) in a close table hash. Its codes are as follows:\n"
+              << "                              - 0: Linear exploration\n"
+              << "                              - 1: Quadratic exploration\n"
+              << "                              - 2: Double Dispersion\n"
+              << "                              - 3: Redispersion\n"
               << "\n";
 }
 
@@ -82,8 +88,8 @@ void Help () {
  * @brief Prints how to use the program
  */
 void Usage() {
-  std::cout << "How to use: ./p03_big_calculator\n"
-            << "Try './p03_big_calculator --help' for further information\n";
+  std::cout << "How to use: ./p04_hash_program [--help | -h] [-ts <s>] [-fd <f>] [-hash <open|close>] [-bs <s] [-fe <f>]\n"
+            << "Try './p04_hash_program [--help | -h]' for further information\n";
 }
 
 
@@ -213,7 +219,7 @@ void menu (char &opcion) {
 /**
  * @brief Function that processes error messages from std::unexpected
  * @param expected options after command line
- * @return 0 if 
+ * @return 0 if an error occurred
  */
 bool ProcessArgsErrors(const std::expected<program_options, parse_args_errors>& options) {
   if (!options.has_value()) {
@@ -228,7 +234,7 @@ bool ProcessArgsErrors(const std::expected<program_options, parse_args_errors>& 
     } else if (options.error() == parse_args_errors::exploration_function_error) {
       std::cerr << "fatal error: Dispersion function code must be 0, 1, 2 or 3" << std::endl;
     } else if (options.error() == parse_args_errors::hash_error) {
-      std::cerr << "fatal error: Hash code must be 0 or 1" << std::endl;
+      std::cerr << "fatal error: Hash code must be 'open' or 'close'" << std::endl;
     }
     Usage();
     return 0;
