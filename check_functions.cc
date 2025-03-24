@@ -66,7 +66,6 @@ bool ValidateNumber (const std::string& line) {
 void Help () {
     std::cout << "./p03_big_calculator -- Calculator that works in bases 2, 8, 10 and 16 with unsigned, integers and rationals\n"
               << "Usage:                ./p04_hash_program [--help | -h] [-ts <s>] [-fd <f>] [-hash <open|close>] [-bs <s] [-fe <f>]\n"
-              << "\n"
               << "    [--help | -h]:       Optional argument. Prints this help\n"
               << "    [-ts <s>]:           Optional argument. Initializes a hash table with the size specified by <s>, positive number greater than 0. Default table size is 1000\n"
               << "    [-fd <f>]:           Optional argument: Specifies with <f> the distribution function to be used in the hash table (module function as default). Its codes are as follows:\n"
@@ -79,8 +78,7 @@ void Help () {
               << "                              - 0: Linear exploration\n"
               << "                              - 1: Quadratic exploration\n"
               << "                              - 2: Double Dispersion\n"
-              << "                              - 3: Redispersion\n"
-              << "\n";
+              << "                              - 3: Redispersion\n";
 }
 
 
